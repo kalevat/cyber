@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Covid Vaccination</title>
+    <style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px;
+    }
+    th {
+        text-align: left;
+    }
+    </style>
+    </head>
+
+
+    <body>
+		<h1>Vaccination</h1>
+        <table>
+		<tr>
+            <th>User</th>
+            <th>Validation</th>
+            <th>Date</th>
+        </tr>
+		{% for account in accounts %}
+            <tr>
+                <td>{{account.user.username}}</td>
+		        {% if account.validation == 1 %}
+                    <td>Yes</td>
+                {% else %}  
+                    <td>No</td>
+                {% endif %}
+                <td>{{account.date}}</td>
+            </tr>
+        {% endfor %}
+		</table>
+        <br>
+
+        <form action='logout/' method="POST">
+			{% csrf_token %}
+            <input type="submit" value="Logout"/>
+        </form>
+		
+        <h2>Change information</h2>
+        <form action='change/' method="POST">
+            {% csrf_token %}
+            <span>To:</span><br/>
+            <select name="user">
+			{% for account in accounts %}
+                <option value="{{account.user.username}}">{{account.user.username}}</option>
+			{% endfor %}
+            </select><br/>
+
+            <span>Vaccination:</span><br/>
+            <input type="radio" id="yes" name="validation" value=1 checked="checked"/>
+            <label for="yes">Yes</label><br/>
+            <input type="radio" id="no" name="validation" value=0>
+            <label for="no">No</label><br>
+            <input type="submit" value="Change"/>
+        </form>
+        
+        {% if staff == True %}
+            <h2>New information</h2>
+            <form action='add/' method="GET">
+                
+                <span>Name:</span><br/>
+                <input type="text" name="user"/><br/>
+                <span>Email:</span><br/>
+                <input type="text" name="email"/><br/>
+                <span>Vaccination:</span><br/>
+                <input type="radio" id="yes" name="validation" value=1 checked="checked"/>
+                <label for="yes">Yes</label><br/>
+                <input type="radio" id="no" name="validation" value=0/>
+                <label for="no">No</label><br>
+                <span>Date:</span><br/>
+                <input type="date" name="vacdate"/><br/>
+                <input type="submit" value="Send"/>
+            </form>
+        {% endif %}
+    </body>
+
+
+    </body>
+</html>
